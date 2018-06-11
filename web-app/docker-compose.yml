@@ -3,6 +3,8 @@ version: '2'
 networks:
   web-app:
     driver: bridge
+  dev:
+    external: true
 services:
   web-app-proxy:
     image: jwilder/nginx-proxy:latest
@@ -40,3 +42,4 @@ services:
     command: bash -c "cd /web-app/PerfectWeek && npm install && npm run build && cd dist && npm install -g http-server && http-server ./"
     networks:
       - web-app
+      - dev
