@@ -1,0 +1,4 @@
+[submodule "web-app/web-app"]
+	path = web-app/web-app
+	url = https://github.com/PerfectWeek/web-app.git
+	branch = dev
