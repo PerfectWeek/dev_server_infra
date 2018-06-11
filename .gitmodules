@@ -2,3 +2,7 @@
 	path = web-app/web-app
 	url = https://github.com/PerfectWeek/web-app.git
 	branch = dev
+[submodule "api/web-api"]
+	path = api/web-api
+	url = https://github.com/PerfectWeek/web-api
+	branch = dev

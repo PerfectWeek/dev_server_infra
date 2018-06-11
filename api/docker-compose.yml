@@ -1,0 +1,53 @@
+version: '2'
+
+networks:
+  api:
+    driver: bridge
+
+services:
+  web-api-proxy:
+    image: jwilder/nginx-proxy:latest
+    ports:
+     - "8000:443"
+    volumes:
+      - '/home/docker/web-api/ssl:/etc/nginx/certs:ro'
+      - '/etc/nginx/vhost.d'
+      - '/usr/share/nginx/html'
+      - '/var/run/docker.sock:/tmp/docker.sock:ro'
+    networks:
+      - api
+  letsencrypt-nginx-proxy-companion:
+    image: jrcs/letsencrypt-nginx-proxy-companion:latest
+    volumes_from:
+      - web-api-proxy
+    volumes:
+      - '/home/docker/web-api/ssl:/etc/nginx/certs:rw'
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+    networks:
+      - api
+  api:
+    image: node:8
+    volumes:
+      - './web-api:/web-api'
+    environment:
+      DB_HOST: db
+      DB_PASSWD: super_secret_pass
+      JWT_ENCODE_KEY: lkjasdlkjasd
+      VIRTUAL_PORT: 3000
+      VIRTUAL_HOST: api.kalastud.io
+      LETSENCRYPT_HOST: api.kalastud.io
+      LETSENCRYPT_EMAIL: iulian.rotaru@epitech.eu
+    command: bash -c "cd /web-api && npm install && sleep 10 && env DB_HOST=db DB_PASSWD=super_secret_pass npm run migration && npm start" 
+    expose:
+      - 3000
+    networks:
+      - api
+  db:
+    image: postgres
+    networks:
+      - api
+    environment:
+      POSTGRES_PASSWORD: super_secret_pass
+      POSTGRES_DB: perfect_week
+
+
