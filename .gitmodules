@@ -1,6 +1,6 @@
 [submodule "web-app/web-app"]
 	path = web-app/web-app
-	url = https://github.com/PerfectWeek/web-app.git
+	url = https://github.com/PerfectWeek/web-app
 	branch = dev
 [submodule "api/web-api"]
 	path = api/web-api
